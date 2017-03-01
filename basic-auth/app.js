@@ -41,8 +41,10 @@ app.use(session({
 
 const index = require('./routes/index');
 const authRoutes = require('./routes/auth-routes.js'); //// WIRES UP THE ROUTES
+const siteRoutes = require('./routes/site-routes.js'); /// Wires up The Site-routes Routes
 app.use('/', index);
 app.use('/', authRoutes); ///// WIRES UP THE ROUTES
+app.use('/', siteRoutes); /// Wires up the siteRoutes
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
