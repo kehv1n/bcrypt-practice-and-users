@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
 const layouts      = require('express-ejs-layouts');
 const mongoose     = require('mongoose');
+const session      = require('express-session'); //Installs Cookies and sessions for basic user auth
+const MongoStore   = require('connect-mongo')(session); //Saves the session to mongodb backed by mongodb
 
 
 mongoose.connect('mongodb://localhost/basic-auth');
@@ -28,6 +30,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(layouts);
+app.use(session({
+  secret: 'Heeee Waaaaas Nuuummmmmber Oneeeee',
+  cookie: { maxAge: 60000},
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 24 * 60 * 60
+    })
+}));
 
 const index = require('./routes/index');
 const authRoutes = require('./routes/auth-routes.js'); //// WIRES UP THE ROUTES
